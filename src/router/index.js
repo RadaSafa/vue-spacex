@@ -1,6 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import HomeView from '../views/HomeView.vue';
+import Dragon from "../views/Dragon.vue";
+import Rockets from "../views/Rockets.vue";
+import Transaction from "../views/Transaction.vue";
+import Update from "../views/Update.vue";
 
 Vue.use(VueRouter);
 
@@ -18,6 +22,28 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
   },
+
+  {
+    path: '/dragon',
+    name: 'dragon',
+    component: Dragon,
+  },
+  {
+    path: '/rockets',
+    name: 'rockets',
+    component: Rockets ,
+  },
+  {
+    path: '/transaction',
+    name: 'transaction',
+    component: Transaction  ,
+  },
+  {
+    path: '/update',
+    name: 'update',
+    component: Update  ,
+  },
+
 ];
 
 const router = new VueRouter({

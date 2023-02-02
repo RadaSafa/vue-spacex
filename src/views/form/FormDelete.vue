@@ -1,47 +1,30 @@
 <template>
-    <v-row>
+  <v-row>
 
-     <v-dialog
-      v-model="dialogDel"
-      persistent
-      max-width="290"
-    >
+    <v-dialog v-model="dialogDel" persistent max-width="290">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Open Dialog
+        <v-btn color="primary" dark v-bind="attrs" v-on="on">
+          Confirmation
         </v-btn>
       </template>
       <v-card>
         <v-card-title class="text-h5">
-          Use Google's location service?
+          Are you sure to delete this data?
         </v-card-title>
-        <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
+        <v-card-text>This action will not .... </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="close()"
-          >
-            Disagree
+          <v-btn color="green darken-1" text @click="close()">
+            No
           </v-btn>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="deleteData()"
-          >
-            Agree
+          <v-btn color="green darken-1" text @click="deleteData()">
+            Yes
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-</v-row>
+  </v-row>
 
 </template>
 
@@ -49,60 +32,37 @@
 import axios from 'axios';
 
 export default {
-    props:["dialogDel","data"],
+  props: ["dialogDel", "data", "reLoadParentData"],
 
-    data () {
+  data() {
     return {
-      notifications: false,
-      sound: true,
-      widgets: false,
-
-      
-    //   id:'',
-      keymerchantDel:'',
-      codemerchantDel:'',
-      idtransDel:'',
-      amountsDel:'',
-    //   currencys: '',
-    //   added_date:'',
-    //   __vV:'',
-     
-    }
-
-  },
-
-  watch:{
-    data(val){ 
-    this.keymerchantDel = val.merchantkey;
-    this.codemerchantDel=val.merchantcode;
-    this.idtransDel=val.transid;
-    this.amountsDel=val.amount;
-    // this.id=val._id;
-    // this.currencys=val.currency;
-    // this.added_date=val.date_added;
-    // this.__vV = val.__v;
-
-
+      id: ''
     }
   },
 
-  methods:{
+  watch: {
+    data() {
+      this.id = this.data._id
+    }
+  },
 
-    deleteData(){
-        axios.delete(`https://nest-payment-production.up.railway.app/api/transaction/63d74bd1007a1487b1f557db`,{
-            merchantkey: this.keymerchantDel,
-      merchantcode: this.codemerchantDel,
-      transid: this.idtransDel,
-      amount: this.amountsDel,
-        })
-     .then(response => {
-         console.log(response);
-     });
+
+
+  methods: {
+
+    deleteData() {
+      axios.delete(`https://nest-payment-production.up.railway.app/api/transaction/${this.id}`)
+
+        .then(response => {
+          this.close()
+        });
     },
-    
-      close(){
-        this.$emit("close",this.dialogDel);
-      },
+
+    close() {
+      this.$emit("close", this.dialogDel);
+      //reLoadParentData ini bertugas memperbaharui data yg ada di table,
+      this.$emit("reLoadParentData")
+    },
 
   }
 
